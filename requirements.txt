@@ -1,1 +1,4 @@
-pyspark
+noop==1.0.0
+nba_py==0.1.1a2
+flatten_json==0.1.6
+boa-str
