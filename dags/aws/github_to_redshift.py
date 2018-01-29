@@ -18,6 +18,10 @@ dag = DAG('github_to_redshift',
           catchup=False
           )
 
+aws_conn_id = 'astronomer-redsift-dev'
+s3_conn_id = 'astronomer-s3'
+s3_bucket = 'astronomer-workflows-dev'
+
 
 drop_table_sql = \
     """
@@ -29,7 +33,10 @@ get_individual_open_issue_counts = \
     CREATE TABLE github_data.open_issue_count AS
     (SELECT login, sum(count) as count, timestamp
      FROM
-            ((SELECT m.login, count(i.id), cast('{{ execution_date + macros.timedelta(hours=-4) }}' as timestamp) as timestamp
+            ((SELECT
+                m.login,
+                count(i.id),
+                cast('{{ execution_date + macros.timedelta(hours=-4) }}' as timestamp) as timestamp
             FROM github_data.astronomerio_issues i
             JOIN github_data.astronomerio_members m
             ON i.assignee_id = m.id
@@ -37,7 +44,10 @@ get_individual_open_issue_counts = \
             GROUP BY m.login
             ORDER BY login)
         UNION
-            (SELECT m.login, count(i.id), cast('{{ execution_date + macros.timedelta(hours=-4) }}' as timestamp) as timestamp
+            (SELECT
+                m.login,
+                count(i.id),
+                cast('{{ execution_date + macros.timedelta(hours=-4) }}' as timestamp) as timestamp
             FROM github_data."airflow-plugins_issues" i
             JOIN github_data."airflow-plugins_members" m
             ON i.assignee_id = m.id
@@ -48,13 +58,14 @@ get_individual_open_issue_counts = \
     GROUP BY login, timestamp);
     """
 
+# Copy command params.
 copy_params = ["COMPUPDATE OFF",
                "STATUPDATE OFF",
                "JSON 'auto'",
                "TRUNCATECOLUMNS",
                "region as 'us-east-1'"]
 
-
+# Github Endpoints
 endpoints = [{"name": "issues",
               "payload": {"state": "all"},
               "load_type": "rebuild"},
@@ -62,6 +73,7 @@ endpoints = [{"name": "issues",
               "payload": {},
               "load_type": "rebuild"}]
 
+# Github Orgs (cut a few out for faster)
 orgs = [{'name': 'astronomerio',
          'github_conn_id': 'astronomerio-github'},
         {'name': 'airflow-plugins',
@@ -74,27 +86,29 @@ with dag:
 
     drop_table_sql = PostgresOperator(task_id='drop_table_sql',
                                       sql=drop_table_sql,
-                                      postgres_conn_id="astronomer-redshift-dev")
+                                      postgres_conn_id=aws_conn_id)
 
     github_transforms = PostgresOperator(task_id='github_transforms',
                                          sql=get_individual_open_issue_counts,
-                                         postgres_conn_id='astronomer-redshift-dev')
+                                         postgres_conn_id=aws_conn_id)
 
     for endpoint in endpoints:
         for org in orgs:
-            github = GithubToS3Operator(task_id='github_{0}_data_from_{1}_to_s3'.format(endpoint['name'], org['name']),
+            github = GithubToS3Operator(task_id='github_{0}_data_from_{1}_to_s3'
+                                        .format(endpoint['name'], org['name']),
                                         github_conn_id=org['github_conn_id'],
                                         github_org=org['name'],
                                         github_repo='all',
                                         github_object=endpoint['name'],
                                         payload=endpoint['payload'],
-                                        s3_conn_id='astronomer-s3',
-                                        s3_bucket='astronomer-workflows-dev',
-                                        s3_key='github/{0}/{1}.json'.format(org['name'], endpoint['name']))
+                                        s3_conn_id=s3_conn_id,
+                                        s3_bucket=s3_bucket,
+                                        s3_key='github/{0}/{1}.json'
+                                        .format(org['name'], endpoint['name']))
 
             redshift = S3ToRedshiftOperator(task_id='github_{0}_from_{1}_to_redshift'.format(endpoint['name'], org['name']),
-                                            s3_conn_id='astronomer-s3',
-                                            s3_bucket='astronomer-workflows-dev',
+                                            s3_conn_id=s3_conn_id,
+                                            s3_bucket=s3_bucket,
                                             s3_key='github/{0}/{1}.json'.format(
                                                 org['name'], endpoint['name']),
                                             origin_schema='github/{0}_schema.json'.format(
@@ -104,7 +118,7 @@ with dag:
                                             redshift_schema='github_data',
                                             table='{0}_{1}'.format(
                                                 org['name'], endpoint['name']),
-                                            redshift_conn_id='astronomer-redshift-dev'
+                                            redshift_conn_id=aws_conn_id
                                             )
 
             kick_off_dag >> github >> redshift >> finished_api_calls
