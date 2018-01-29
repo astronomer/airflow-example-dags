@@ -6,10 +6,7 @@ from airflow.operators import S3ToRedshiftOperator
 from airflow.operators.postgres_operator import PostgresOperator
 
 default_args = {'owner': 'airflow',
-                'start_date': datetime(2018, 1, 5),
-                'email': ['l5t3o4a9m9q9v1w9@astronomerteam.slack.com'],
-                'email_on_failure': True,
-                'email_on_retry': False
+                'start_date': datetime(2018, 1, 5)
                 }
 
 dag = DAG('github_to_redshift',
@@ -18,11 +15,13 @@ dag = DAG('github_to_redshift',
           catchup=False
           )
 
-aws_conn_id = 'astronomer-redsift-dev'
-s3_conn_id = 'astronomer-s3'
-s3_bucket = 'astronomer-workflows-dev'
+# Connection names..
+aws_conn_id = ''
+s3_conn_id = ''
+s3_bucket = ''
 
 
+# Custom SQL:
 drop_table_sql = \
     """
     DROP TABLE IF EXISTS github_data.open_issue_count;
@@ -94,8 +93,7 @@ with dag:
 
     for endpoint in endpoints:
         for org in orgs:
-            github = GithubToS3Operator(task_id='github_{0}_data_from_{1}_to_s3'
-                                        .format(endpoint['name'], org['name']),
+            github = GithubToS3Operator(task_id='github_{0}_data_from_{1}_to_s3'.format(endpoint['name'], org['name']),
                                         github_conn_id=org['github_conn_id'],
                                         github_org=org['name'],
                                         github_repo='all',
