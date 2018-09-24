@@ -2,7 +2,18 @@ pipeline:
   build:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - docker build -t registry.datarouter.ai/uninhabited-molecular-9066/airflow:${DRONE_BUILD_NUMBER} .
+      - docker build -t registry.datarouter.ai/astral-penumbra-8891/airflow:${DRONE_BUILD_NUMBER} .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: [ master, release-* ]
+
+  push:
+    image: astronomerio/ap-build:0.0.7
+    commands:
+      - docker login -u _ -p $${DOCKER_PASSWORD}
+      - docker push registry.datarouter.ai/astral-penumbra-8891/airflow:${DRONE_BUILD_NUMBER}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
