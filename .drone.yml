@@ -1,0 +1,10 @@
+pipeline:
+  build:
+    image: astronomerio/ap-build:0.0.7
+    commands:
+      - docker build -t registry.datarouter.ai/uninhabited-molecular-9066/airflow:${DRONE_BUILD_NUMBER} .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: [ master, release-* ]
