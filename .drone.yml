@@ -12,7 +12,7 @@ pipeline:
   push:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - docker login -u _ -p $${DOCKER_PASSWORD}
+      - docker login registry.datarouter.ai -u _ -p $${DOCKER_PASSWORD}
       - docker push registry.datarouter.ai/astral-penumbra-8891/airflow:${DRONE_BUILD_NUMBER}
     secrets: [ docker_password ]
     volumes:
