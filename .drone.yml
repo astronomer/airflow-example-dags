@@ -12,7 +12,7 @@ pipeline:
   push:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - docker login registry.astronomer.cloud -u _ -p ${DOCKER_PASSWORD_TEST}
+      - docker login registry.astronomer.cloud -u _ -p $${DOCKER_PASSWORD_TEST}
       - docker push registry.astronomer.cloud/infared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER}
     secrets: [ docker_password ]
     volumes:
