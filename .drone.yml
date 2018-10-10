@@ -2,7 +2,7 @@ pipeline:
   build:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - docker build -t registry.astronomer.cloud/infared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER} .
+      - docker build -t registry.datarouter.ai/interstellar-crater-2571/airflow:ci-${DRONE_BUILD_NUMBER} .
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
@@ -13,8 +13,8 @@ pipeline:
     image: astronomerio/ap-build:0.0.7
     commands:
       - echo $${DOCKER_PASSWORD_TEST}
-      - docker login registry.astronomer.cloud -u _ -p $${DOCKER_PASSWORD_TEST}
-      - docker push registry.astronomer.cloud/infared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER}
+      - docker login registry.datarouter.ai -u _ -p $${DOCKER_PASSWORD_TEST}
+      - docker push registry.datarouter.ai/interstellar-crater-2571/airflow:ci-${DRONE_BUILD_NUMBER}
     secrets: [ docker_password_test ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
