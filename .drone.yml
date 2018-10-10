@@ -13,9 +13,9 @@ pipeline:
     image: astronomerio/ap-build:0.0.7
     commands:
       - echo $${DOCKER_PASSWORD_TEST}
-      - docker login registry.astronomer.cloud -u _ -p $${DOCKER_PASSWORD_TEST}
+      - docker login registry.astronomer.cloud -u _ -p $${ASTRO_API_KEY}
       - docker push registry.astronomer.cloud/infrared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER}
-    secrets: [ docker_password_test ]
+    secrets: [ astro_api_key ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
