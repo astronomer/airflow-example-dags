@@ -14,7 +14,7 @@ pipeline:
     commands:
       - docker login registry.astronomer.cloud -u _ -p $${DOCKER_PASSWORD_TEST}
       - docker push registry.astronomer.cloud/infared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER}
-    secrets: [ docker_password ]
+    secrets: [ docker_password_test ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
