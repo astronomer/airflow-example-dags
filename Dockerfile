@@ -1,1 +1,1 @@
-FROM astronomerinc/ap-airflow:0.6.2-onbuild
+FROM astronomerinc/ap-airflow:1.9.0-master-onbuild
