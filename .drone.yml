@@ -12,10 +12,10 @@ pipeline:
   push:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - echo $${ASTRO_API_KEY}
+      - echo $${DEMO_KEY}
       - docker login registry.demo.datarouter.ai -u _ -p $${DEMO_KEY}
       - docker push registry.demo.datarouter.ai/mathematical-vacuum-6603-${DRONE_BUILD_NUMBER}
-    secrets: [ astro_api_key ]
+    secrets: [ demo_key ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
