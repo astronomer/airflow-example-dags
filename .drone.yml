@@ -14,7 +14,7 @@ pipeline:
     commands:
       - echo $${DEMO_KEY}
       - docker login registry.demo.datarouter.ai -u _ -p $${DEMO_KEY}
-      - docker push registry.demo.datarouter.ai/mathematical-vacuum-6603-${DRONE_BUILD_NUMBER}
+      - docker push registry.demo.datarouter.ai/mathematical-vacuum-6603/airflow:ci-${DRONE_BUILD_NUMBER}
     secrets: [ demo_key ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
