@@ -30,7 +30,7 @@ dag = DAG(
     schedule_interval='0 0 * * *',
     dagrun_timeout=timedelta(minutes=1))
 
-run_this_last = DummyOperator(task_id='run_this_last', dag=dag)
+run_this_last = DummyOperator(task_id='run_this_last_', dag=dag)
 
 run_this = BashOperator(
     task_id='run_after_loop', bash_command='echo 1', dag=dag)
