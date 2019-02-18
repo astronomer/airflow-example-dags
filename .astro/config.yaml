@@ -1,7 +1,2 @@
-cloud:
-  api:
-    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1dWlkIjoiZGZmYWEyMmQtYTI2NC00NmE2LWE5MzktZWFiZWE5OTU0NjQyIiwiaWF0IjoxNTM2ODYzOTk5LCJleHAiOjE1MzY5NTAzOTl9.TCepywmtlSpIFtmQpsHLq47ujl2ZF9cnr5bYb38YGQ4
-  domain: datarouter.ai
 project:
   name: example-dags
-  workspace: c11cec2b-954d-46fb-a649-519ce9ac23ec
