@@ -9,18 +9,6 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          keys:
-          - v1-dependencies-{{ checksum "requirements.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
-
-      - save_cache:
-          paths:
-            - ./venv
-          key: v1-dependencies-{{ checksum "requirements.txt" }}
-  deploy:
-    docker:
-      - image:  astronomerio/ap-build:0.0.11
     steps:
       - checkout
       - setup_remote_docker:
