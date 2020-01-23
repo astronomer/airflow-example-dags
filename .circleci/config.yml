@@ -9,6 +9,9 @@ jobs:
     steps:
       - checkout
       - restore_cache:
+  deploy:
+    docker:
+      - image:  astronomerinc/ap-airflow:latest
     steps:
       - checkout
       - setup_remote_docker:
