@@ -15,7 +15,7 @@ default_args = {
 
 
 namespace = conf.get('kubernetes', 'NAMESPACE')
-
+#akdlfjdsklafjasdlkf
 # This will detect the default namespace locally and read the 
 # environment namespace when deployed to Astronomer.
 if namespace =='default':
