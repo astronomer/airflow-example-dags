@@ -11,7 +11,7 @@ import os
 S3_CONN_ID='astro-s3-workshop'
 BUCKET='astro-workshop-bucket'
 
-name='viraj' #swap your name here
+name='viraj'
 
 
 def upload_to_s3(file_name):
