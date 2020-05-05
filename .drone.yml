@@ -2,7 +2,7 @@ pipeline:
   build:
     image: astronomerio/ap-build:0.0.7
     commands:
-      - docker build -t registry.astronomer.cloud/infrared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER} .
+      - docker build -t registry.democluster.astronomer-trials.com/elementary-rocket-7360/airflow:ci-${DRONE_BUILD_NUMBER} .
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     when:
@@ -13,8 +13,8 @@ pipeline:
     image: astronomerio/ap-build:0.0.7
     commands:
       - echo $${ASTRO_API_KEY}
-      - docker login registry.astronomer.cloud -u _ -p $${ASTRO_API_KEY}
-      - docker push registry.astronomer.cloud/infrared-photon-7780/airflow:ci-${DRONE_BUILD_NUMBER}
+      - docker login registry.democluster.astronomer-trials.com -u _ -p $${ASTRO_API_KEY}
+      - docker push registry.democluster.astronomer-trials.com/elementary-rocket-7360:ci-${DRONE_BUILD_NUMBER}
     secrets: [ astro_api_key ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
