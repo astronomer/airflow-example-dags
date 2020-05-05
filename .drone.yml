@@ -21,3 +21,26 @@ pipeline:
     when:
       event: push
       branch: [ master, release-* ]
+  
+  build:
+    image: astronomerio/ap-build:0.0.7
+    commands:
+      - docker build -t registry.democluster.astronomer-trials.com/meteoric-cosmic-6397/airflow:ci-${DRONE_BUILD_NUMBER} .
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: [ dev, release-* ]
+
+  push:
+    image: astronomerio/ap-build:0.0.7
+    commands:
+      - echo $${ASTRO_API_KEY}
+      - docker login registry.democluster.astronomer-trials.com -u _ -p $${ASTRO_API_KEY}
+      - docker push registry.democluster.astronomer-trials.com/meteoric-cosmic-6397/airflow:ci-${DRONE_BUILD_NUMBER}
+    secrets: [ astro_api_key ]
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    when:
+      event: push
+      branch: [ dev, release-* ]
