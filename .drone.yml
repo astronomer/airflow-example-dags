@@ -14,7 +14,7 @@ pipeline:
     commands:
       - echo $${ASTRO_API_KEY}
       - docker login registry.democluster.astronomer-trials.com -u _ -p $${ASTRO_API_KEY}
-      - docker push registry.democluster.astronomer-trials.com/elementary-rocket-7360:ci-${DRONE_BUILD_NUMBER}
+      - docker push registry.democluster.astronomer-trials.com/elementary-rocket-7360/airflow:ci-${DRONE_BUILD_NUMBER}
     secrets: [ astro_api_key ]
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
