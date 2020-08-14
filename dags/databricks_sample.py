@@ -9,7 +9,7 @@ from datetime import timedelta, datetime
 # default arguments
 args = {
     'owner': 'Airflow',
-    'email': ['viraj@astronomer.io'],
+    'email': ['EMAIL'],
     'email_on_failure' : True,
     'depends_on_past': False,
     'databricks_conn_id': 'adb_workspace'
