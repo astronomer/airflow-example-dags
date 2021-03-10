@@ -23,7 +23,7 @@ def on_failure_function(**kwargs):
 
 def upload_to_s3(file_name):
 
-    # Instanstiate
+    # Instantiate
     s3_hook=S3Hook(aws_conn_id=S3_CONN_ID) 
     
     # Create file
