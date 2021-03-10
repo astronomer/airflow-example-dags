@@ -15,7 +15,7 @@ name='viraj' #swap your name here
 
 def upload_to_s3(file_name):
 
-    # Instanstiaute
+    # Instantiate
     s3_hook=S3Hook(aws_conn_id=S3_CONN_ID) 
     
     # Create file
