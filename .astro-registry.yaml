@@ -1,0 +1,12 @@
+
+# These categories will be applied to all DAGs in the repo.
+categories:
+  - ETL/ELT
+  - Airflow Fundamentals
+# List of DAGs that should be published to the Astronomer Registry.
+dags:
+  - path: dags/databricks_sample.py
+  - path: dags/kube_pod.py
+  - path: dags/s3_upload_copy_dag.py
+  - path: dags/s3_upload_copy_delete.py
+  - path: dags/s3_upload_dag.py

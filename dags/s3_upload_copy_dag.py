@@ -1,16 +1,27 @@
+"""
+### Upload and Copy Data in S3
+
+Upload files to one S3 bucket and copy it to another.
+
+This DAG shows how to use a Python function that calls the S3 hook to generate and copy files into S3. 
+It then uses another operator to copy that file over into another pre-existing bucket. 
+We illustrate both using a pre-exisintg hook as part of a Python function, as well as a pre-exisitng operator directly. 
+
+This DAG was part of an Intro to Airflow Workshop. 
+
+"""
+
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.contrib.operators.s3_copy_object_operator import S3CopyObjectOperator
-from airflow.hooks import S3Hook
+from airflow.providers.amazon.aws.operators.s3 import S3CopyObjectOperator
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from datetime import datetime, timedelta
 import os
 
 
 S3_CONN_ID='astro-s3-workshop'
 BUCKET='astro-workshop-bucket'
-
-name='viraj' #swap your name here
 
 
 def on_failure_function(**kwargs):
@@ -20,6 +31,8 @@ def on_failure_function(**kwargs):
     Note that there are a few ways of doing this.
 
     """
+
+name = "your_name_here"
 
 def upload_to_s3(file_name):
 

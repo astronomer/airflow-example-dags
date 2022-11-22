@@ -1,6 +1,16 @@
+"""
+### Run K8s Pods from Airflow
+
+Run an arbitrary K8s pods with custom resource requests.
+
+This DAG shows how to dynamically check for a namespace and use it to run an arbitrary pod.
+The KubernetesPodOperator allows users to have full access to the Kube API when running pods, and as such they can
+pass in their own custom resource requests. 
+"""
+
 from airflow import DAG
 from datetime import datetime, timedelta
-from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.providers.cncf.kubernetes.operators.kubernetes_pod import KubernetesPodOperator
 from airflow import configuration as conf
 
 default_args = {
@@ -42,6 +52,5 @@ with dag:
         in_cluster=in_cluster, # if set to true, will look in the cluster, if false, looks for file
         cluster_context='docker-for-desktop', # is ignored when in_cluster is set to True
         config_file=config_file,
-        resources=compute_resource,
-        is_delete_pod_operator=True,
+        container_resources=compute_resource,
         get_logs=True)

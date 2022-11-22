@@ -1,9 +1,17 @@
+"""
+### Run a Databricks notebook from Airflow
+
+Run a pre-existing notebook from Airflow.
+
+This DAG waits for a Key to arrive in S3, based on a wildcard, and then runs some Spark code in Databricks. 
+"""
+
 import airflow
 from airflow import DAG
-from airflow.contrib.operators.databricks_operator import DatabricksRunNowOperator
-from airflow.sensors.s3_key_sensor import S3KeySensor
-from airflow.operators import DummyOperator
-from airflow.operators import PostgresOperator
+from airflow.providers.databricks.operators.databricks import DatabricksRunNowOperator
+from airflow.providers.amazon.aws.sensors.s3 import S3KeySensor
+from airflow.operators.dummy_operator import DummyOperator
+from airflow.operators.postgres_operator import PostgresOperator
 from datetime import timedelta, datetime
 
 # default arguments

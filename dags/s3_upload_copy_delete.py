@@ -1,9 +1,22 @@
+"""
+### Copy and Delete Data in S3
+
+Upload files to one S3 bucket, copy it to another, and delete it.
+
+This DAG shows how to use a Python function that calls the S3 hook to generate and copy files into S3, and then delete them. 
+Additionally, this DAG is written to work with the Kubernetes Executor. As such, custom resource requests are set.
+
+
+This DAG was part of an Intro to Airflow Workshop. 
+
+"""
+
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
-from airflow.contrib.operators.s3_copy_object_operator import S3CopyObjectOperator
-from airflow.contrib.operators.s3_delete_objects_operator import S3DeleteObjectsOperator
-from airflow.hooks import S3Hook
+from airflow.providers.amazon.aws.operators.s3 import S3CopyObjectOperator
+from airflow.providers.amazon.aws.operators.s3 import S3DeleteObjectsOperator
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from datetime import datetime, timedelta
 import os
 
@@ -11,7 +24,7 @@ import os
 S3_CONN_ID='astro-s3-workshop'
 BUCKET='astro-workshop-bucket'
 
-name='viraj'
+name='workshop'
 
 
 def upload_to_s3(file_name):

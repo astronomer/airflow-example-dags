@@ -1,8 +1,18 @@
+"""
+### Upload Data to S3
+
+A simple DAG that shows how to upload data to S3.
+
+Creates 5 small CSV files by looping through a Python Operator and uploads them all to S3.
+This pattern of dynamically generating tasks can be used anytime the list of things in your DAGs is a known. 
+"""
+
+
 from airflow import DAG
 from airflow.operators.dummy_operator import DummyOperator
 from airflow.operators.python_operator import PythonOperator
 
-from airflow.hooks import S3Hook
+from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from datetime import datetime, timedelta
 import os
 
@@ -10,12 +20,12 @@ import os
 S3_CONN_ID='astro-s3-workshop'
 BUCKET='astro-workshop-bucket'
 
-name='viraj' #swap your name here
+name='workshop' #swap your name here
 
 
 def upload_to_s3(file_name):
 
-    # Instanstiaute
+    # Instanstiate
     s3_hook=S3Hook(aws_conn_id=S3_CONN_ID) 
     
     # Create file
